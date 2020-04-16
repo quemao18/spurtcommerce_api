@@ -24,14 +24,9 @@ export const expressLoader: MicroframeworkLoader = (settings: MicroframeworkSett
          * We could have also use useExpressServer here to attach controllers to an existing express instance.
          */
         const app = express();
-        const https = require('https');
-        const fs = require('fs');
         app.use(bodyParser.urlencoded({extended: true}));
         app.use(bodyParser.json({limit: '50mb'}));
-
         const expressApp: Application = useExpressServer(app, {
-            // key: fs.readFileSync('/etc/letsencrypt/live/my_api_url/privkey.pem'),
-            // cert: fs.readFileSync('/etc/letsencrypt/live/my_api_url/fullchain.pem'),
             cors: true,
             classTransformer: true,
             routePrefix: env.app.routePrefix,
@@ -61,14 +56,6 @@ export const expressLoader: MicroframeworkLoader = (settings: MicroframeworkSett
             settings.setData('express_server', server);
         }
 
-        if (env.isProduction) {
-        // const server = expressApp.listen(env.app.port);
-        // settings.setData('express_server', server);
-        https.createServer({
-            key: fs.readFileSync('/etc/letsencrypt/live/api.decasta.com.ve/privkey.pem'),
-            cert: fs.readFileSync('/etc/letsencrypt/live/api.decasta.com.ve/fullchain.pem'),
-          }, expressApp);
-        }
         // Here we can set the data for other loaders
         settings.setData('express_app', expressApp);
     }
