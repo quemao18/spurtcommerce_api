@@ -75,7 +75,7 @@ export class CustomerController {
         if (resultUser) {
             const successResponse: any = {
                 status: 1,
-                message: request.headers.language == 'es'? 'Ya estas registrado, intenta acceder': 'You already registered please login.',
+                message: request.headers.language === 'es' ? 'Ya estas registrado, intenta acceder' : 'You already registered please login.',
             };
             return response.status(400).send(successResponse);
         }
@@ -87,9 +87,8 @@ export class CustomerController {
             if (sendMailRes) {
                 const successResponse: any = {
                     status: 1,
-                    message: 
-                    request.headers.language == 'es'? 
-                    'Gracias por registrarte, revisa tu email para ver los detalles del registro':
+                    message: request.headers.language === 'es' ?
+                    'Gracias por registrarte, revisa tu email para ver los detalles del registro' :
                     'Thank you for registering with us. Kindly check your email inbox for further details. ',
                     data: classToPlain(resultData),
                 };
@@ -97,9 +96,7 @@ export class CustomerController {
             } else {
                 const errorResponse: any = {
                     status: 0,
-                    message: 
-                    request.headers.language == 'es'? 
-                    'Regristro correcto, pero no se pudo enviar el email':
+                    message: request.headers.language === 'es' ? 'Regristro correcto, pero no se pudo enviar el email' :
                     'Registration successful, but unable to send email. ',
                 };
                 return response.status(400).send(errorResponse);
@@ -107,10 +104,9 @@ export class CustomerController {
         }
         const errorPasswordResponse: any = {
             status: 0,
-            message: 
-            request.headers.language == 'es'? 
-            'Error entre el password y la confirmación':
-            'A mismatch between password and confirm password. ',
+            message: request.headers.language === 'es' ?
+            'Error entre el password y la confirmación' :
+            'A mismatch between password and confirm password.',
         };
         return response.status(400).send(errorPasswordResponse);
     }
@@ -141,7 +137,7 @@ export class CustomerController {
         if (!resultData) {
             const errorResponse: any = {
                 status: 0,
-                message: request.headers.language == 'es'? 'Email no registrado': 'Invalid Email Id',
+                message: request.headers.language === 'es' ? 'Email no registrado' : 'Invalid Email Id',
             };
             return response.status(400).send(errorResponse);
         }
@@ -155,16 +151,14 @@ export class CustomerController {
         if (sendMailRes) {
             const successResponse: any = {
                 status: 1,
-                message: 
-                request.headers.language == 'es'? 'Contraseña enviada al Email':
+                message: request.headers.language === 'es' ? 'Contraseña enviada al Email' :
                 'Your password has been sent to your email inbox.',
             };
             return response.status(200).send(successResponse);
         } else {
             const errorResponse: any = {
                 status: 0,
-                message: 
-                request.headers.language == 'es'? 'Error enviando email, email no registrado':
+                message: request.headers.language === 'es' ? 'Error enviando email, email no registrado' :
                 'Error in sending email, Invalid email.',
             };
             return response.status(400).send(errorResponse);
@@ -205,14 +199,14 @@ export class CustomerController {
             if (!resultData) {
                 const errorUserNameResponse: any = {
                     status: 0,
-                    message: request.headers.language == 'es'? 'Email no registrado':'Invalid EmailId',
+                    message: request.headers.language === 'es' ? 'Email no registrado' : 'Invalid EmailId',
                 };
                 return response.status(400).send(errorUserNameResponse);
             }
             if (resultData.isActive === 0) {
                 const errorUserInActiveResponse: any = {
                     status: 0,
-                    message: request.headers.language == 'es'? 'Cliente inactivo':'InActive Customer.',
+                    message: request.headers.language === 'es' ? 'Cliente inactivo' : 'InActive Customer.',
                 };
                 return response.status(400).send(errorUserInActiveResponse);
             }
@@ -232,13 +226,9 @@ export class CustomerController {
                 const customer = await this.customerService.findOne({where: {email: loginParam.emailId, deleteFlag: 0}});
                 customer.lastLogin = savedloginLog.createdDate;
                 await this.customerService.create(customer);
-                console.log('lag',request.headers.language);
                    const successResponse: any = {
                         status: 1,
-                        message: 
-                        request.headers.language == 'es' ? 
-                        'Acceso correcto':
-                        'Loggedin successfully',
+                        message: request.headers.language === 'es' ? 'Acceso correcto' : 'Loggedin successfully',
                         data: {
                             token,
                             user: classToPlain(resultData),
@@ -248,7 +238,7 @@ export class CustomerController {
             }
             const errorResponse: any = {
                 status: 0,
-                message: request.headers.language == 'es'? 'Contraseña incorrecta':'Invalid password',
+                message: request.headers.language === 'es' ? 'Contraseña incorrecta' : 'Invalid password',
             };
             return response.status(400).send(errorResponse);
     }
@@ -284,7 +274,7 @@ export class CustomerController {
             if (val) {
                 const errResponse: any = {
                     status: 0,
-                    message: 'you are given a same password, please try different one',
+                    message: request.headers.language === 'es' ? 'Misma contraseña, prueba una diferente' : 'you are given a same password, please try different one',
                 };
                 return response.status(400).send(errResponse);
             }
@@ -293,14 +283,14 @@ export class CustomerController {
             if (updateUserData) {
                 const successResponse: any = {
                     status: 1,
-                    message: 'Your password changed successfully',
+                    message: request.headers.language === 'es' ? 'Contraseña cambiada' : 'Your password changed successfully',
                 };
                 return response.status(200).send(successResponse);
             }
         }
         const errorResponse: any = {
             status: 0,
-            message: 'Your old password is wrong',
+            message: request.headers.language === 'es' ? 'Contraseña antigua incorrecta' : 'Your old password is wrong',
         };
         return response.status(400).send(errorResponse);
     }
@@ -328,7 +318,7 @@ export class CustomerController {
         const resultData = await this.customerService.findOne({where: {id: request.user.id}});
         const successResponse: any = {
             status: 1,
-            message: 'Successfully Get the Profile.',
+            message: request.headers.language === 'es' ? 'Perfil correcto' : 'Successfully Get the Profile.',
             data: resultData,
         };
         return response.status(200).send(successResponse);
@@ -402,7 +392,7 @@ export class CustomerController {
             if (updateUserData) {
                 const successResponseResult: any = {
                     status: 1,
-                    message: 'Your profile Update Successfully.',
+                    message: request.headers.language === 'es' ? 'Perfil actualizado' : 'Your profile Update Successfully.',
                     data: classToPlain(updateUserData),
                 };
                 return response.status(200).send(successResponseResult);
@@ -412,7 +402,7 @@ export class CustomerController {
         const updateuserData = await this.customerService.update(resultData.id, resultData);
         const successResponse: any = {
             status: 1,
-            message: 'Your profile Update Successfully.',
+            message: request.headers.language === 'es' ? 'Perfil actualizado' : 'Your profile Update Successfully.',
             data: classToPlain(updateuserData),
         };
         return response.status(200).send(successResponse);
@@ -441,7 +431,7 @@ export class CustomerController {
      * HTTP/1.1 500 Internal Server Error
      */
     @Get('/login-log-list')
-    public async LogList(@QueryParam('limit') limit: number, @Res() response: any): Promise<any> {
+    public async LogList(@QueryParam('limit') limit: number, @Res() response: any, @Req() request: any): Promise<any> {
         const loginLogList = await this.loginLogService.logList(limit);
         const promise = loginLogList.map(async (result: any) => {
             const moment = require('moment');
@@ -453,7 +443,7 @@ export class CustomerController {
         const finalResult = await Promise.all(promise);
         const successResponse: any = {
             status: 1,
-            message: 'Successfully get login Log list',
+            message: request.headers.language === 'es' ? 'Log de lista de accesos' : 'Successfully get login Log list',
             data: finalResult,
         };
         return response.status(200).send(successResponse);
