@@ -75,7 +75,7 @@ export class CustomerController {
         if (resultUser) {
             const successResponse: any = {
                 status: 1,
-                message: 'You already registered please login.',
+                message: request.headers.language == 'es'? 'Ya estas registrado, intenta acceder': 'You already registered please login.',
             };
             return response.status(400).send(successResponse);
         }
@@ -87,21 +87,30 @@ export class CustomerController {
             if (sendMailRes) {
                 const successResponse: any = {
                     status: 1,
-                    message: 'Thank you for registering with us. Kindly check your email inbox for further details. ',
+                    message: 
+                    request.headers.language == 'es'? 
+                    'Gracias por registrarte, revisa tu email para ver los detalles del registro':
+                    'Thank you for registering with us. Kindly check your email inbox for further details. ',
                     data: classToPlain(resultData),
                 };
                 return response.status(200).send(successResponse);
             } else {
                 const errorResponse: any = {
                     status: 0,
-                    message: 'Registration successful, but unable to send email. ',
+                    message: 
+                    request.headers.language == 'es'? 
+                    'Regristro correcto, pero no se pudo enviar el email':
+                    'Registration successful, but unable to send email. ',
                 };
                 return response.status(400).send(errorResponse);
             }
         }
         const errorPasswordResponse: any = {
             status: 0,
-            message: 'A mismatch between password and confirm password. ',
+            message: 
+            request.headers.language == 'es'? 
+            'Error entre el password y la confirmación':
+            'A mismatch between password and confirm password. ',
         };
         return response.status(400).send(errorPasswordResponse);
     }
@@ -127,12 +136,12 @@ export class CustomerController {
      */
     // Forgot Password Function
     @Post('/forgot-password')
-    public async forgotPassword(@Body({validate: true}) forgotparam: any, @Res() response: any): Promise<any> {
+    public async forgotPassword(@Body({validate: true}) forgotparam: any, @Res() response: any, @Req() request: any): Promise<any> {
         const resultData = await this.customerService.findOne({where: {email: forgotparam.emailId, deleteFlag: 0}});
         if (!resultData) {
             const errorResponse: any = {
                 status: 0,
-                message: 'Invalid Email Id',
+                message: request.headers.language == 'es'? 'Email no registrado': 'Invalid Email Id',
             };
             return response.status(400).send(errorResponse);
         }
@@ -146,13 +155,17 @@ export class CustomerController {
         if (sendMailRes) {
             const successResponse: any = {
                 status: 1,
-                message: 'Your password has been sent to your email inbox.',
+                message: 
+                request.headers.language == 'es'? 'Contraseña enviada al Email':
+                'Your password has been sent to your email inbox.',
             };
             return response.status(200).send(successResponse);
         } else {
             const errorResponse: any = {
                 status: 0,
-                message: 'Error in sending email, Invalid email.',
+                message: 
+                request.headers.language == 'es'? 'Error enviando email, email no registrado':
+                'Error in sending email, Invalid email.',
             };
             return response.status(400).send(errorResponse);
         }
@@ -192,14 +205,14 @@ export class CustomerController {
             if (!resultData) {
                 const errorUserNameResponse: any = {
                     status: 0,
-                    message: 'Invalid EmailId',
+                    message: request.headers.language == 'es'? 'Email no registrado':'Invalid EmailId',
                 };
                 return response.status(400).send(errorUserNameResponse);
             }
             if (resultData.isActive === 0) {
                 const errorUserInActiveResponse: any = {
                     status: 0,
-                    message: 'InActive Customer.',
+                    message: request.headers.language == 'es'? 'Cliente inactivo':'InActive Customer.',
                 };
                 return response.status(400).send(errorUserInActiveResponse);
             }
@@ -219,9 +232,13 @@ export class CustomerController {
                 const customer = await this.customerService.findOne({where: {email: loginParam.emailId, deleteFlag: 0}});
                 customer.lastLogin = savedloginLog.createdDate;
                 await this.customerService.create(customer);
+                console.log('lag',request.headers.language);
                    const successResponse: any = {
                         status: 1,
-                        message: 'Loggedin successfully',
+                        message: 
+                        request.headers.language == 'es' ? 
+                        'Acceso correcto':
+                        'Loggedin successfully',
                         data: {
                             token,
                             user: classToPlain(resultData),
@@ -231,7 +248,7 @@ export class CustomerController {
             }
             const errorResponse: any = {
                 status: 0,
-                message: 'Invalid password',
+                message: request.headers.language == 'es'? 'Contraseña incorrecta':'Invalid password',
             };
             return response.status(400).send(errorResponse);
     }
