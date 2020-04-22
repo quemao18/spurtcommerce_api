@@ -3,6 +3,7 @@ typescript global
 sudo apt-get install graphicsmagick
 sudo apt-get install gm -g
 sudo npm i typescript@3.8.3 -g 
+sudo npm i ts-node@7.0.1 -g
 
 #USE NGINX proxy_pass 
 
