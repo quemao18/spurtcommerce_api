@@ -125,9 +125,10 @@ export class S3Service {
                 }
                 console.log(data);
                 if (data) {
-                    const gm = require('gm').subClass({imageMagick: true});
+                    const gm = require('gm').subClass({imageMagick: false});
                     return gm(data.Body)
                         .resize(widthString, heightString)
+                        .limit('memory', '1024MB').setFormat('png')
                         .toBuffer((error: any, buffer: any) => {
                             if (error) {
                                 throw error;
