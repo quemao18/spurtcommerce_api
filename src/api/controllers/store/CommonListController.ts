@@ -439,13 +439,13 @@ export class CommonListController {
         if (sendMailRes) {
             const successResponse: any = {
                 status: 1,
-                message: 'Your request Successfully send',
+                message: request.headers.language === 'es' ? 'Email enviado con éxito, pronto lo contactaremos' : 'Your request Successfully send',
             };
             return response.status(200).send(successResponse);
         } else {
             const errorResponse: any = {
                 status: 0,
-                message: 'Mail does not send',
+                message: request.headers.language === 'es' ? 'Email no enviado' : 'Mail does not send',
             };
             return response.status(400).send(errorResponse);
         }
